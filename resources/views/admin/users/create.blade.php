@@ -39,12 +39,12 @@
                 </span>
             @endif
         </div>
-        <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }}">
-             {!! Form::label('file','File:') !!}
-             {!! Form::file('file',null,['class'=>'form-control']) !!}
-             @if ($errors->has('file'))
+        <div class="form-group{{ $errors->has('photo_id') ? ' has-error' : '' }}">
+             {!! Form::label('photo_id','Photo:') !!}
+             {!! Form::file('photo_id',null,['class'=>'form-control']) !!}
+             @if ($errors->has('photo_id'))
                   <span class="help-block">
-                        <strong>{{ $errors->first('file') }}</strong>
+                        <strong>{{ $errors->first('photo_id') }}</strong>
                   </span>
              @endif
         </div>
