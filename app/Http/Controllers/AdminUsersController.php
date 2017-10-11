@@ -10,6 +10,8 @@ use App\Role;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\UserEditRequest;
 use App\Photo;
+use Illuminate\Support\Facades\Session;
+use function MongoDB\BSON\toJSON;
 
 class AdminUsersController extends Controller
 {
@@ -20,7 +22,8 @@ class AdminUsersController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+       //$users = User::all();
+        $users = User::paginate(2);
         return view('admin.users.index', compact('users'));
     }
 
@@ -108,6 +111,7 @@ class AdminUsersController extends Controller
         $user = User::findOrFail($id);
 
         $user->update($input);
+        Session::flash('user_update_success','User has been updated');
 
         return redirect()->route('admin.users.index');
     }
@@ -120,6 +124,15 @@ class AdminUsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+
+        if( $user->photo ) {
+            unlink(public_path() .  $user->photo->file);
+        }
+
+        if( $user->delete() ){
+            return json_encode(["success" => true]);
+        }
+        return json_encode(["success" => false]);
     }
 }

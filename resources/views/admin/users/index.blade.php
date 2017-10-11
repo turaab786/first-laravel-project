@@ -1,6 +1,11 @@
 @extends('layouts.admin')
 
 @section('content')
+    @if(Session::has('user_update_success'))
+        <div class="alert alert-success">
+            <strong>Success!</strong> {{session('user_update_success')}}
+        </div>
+    @endif
     <h3>Users</h3>
      <table class="table">
          <thead>
@@ -27,9 +32,63 @@
              <td>{{ ($user->is_active == 1) ? "Active" : "Not Active" }}</td>
              <td>{{ $user->created_at->diffForHumans() }}</td>
              <td>{{ $user->updated_at->diffForHumans() }}</td>
-             <td><a href="{{route('admin.users.edit',$user->id)}}" class="btn btn-primary btn-xs" data-title="Edit"><span class="glyphicon glyphicon-pencil"></span></a> | <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></td>
+             <td><a href="{{route('admin.users.edit',$user->id)}}" class="btn btn-primary btn-xs" data-title="Edit"><span class="glyphicon glyphicon-pencil"></span></a> | <button class="delete-btn btn btn-danger btn-xs" data-user-id = "{{$user->id}}" data-title="Delete" ><span class="glyphicon glyphicon-trash"></span></button></td>
            </tr>
          @endforeach
          </tbody>
       </table>
+      <div class="row">
+          <div class="col-sm-9"></div>
+          <div class="col-sm-3">
+              {{ $users->render()  }}
+          </div>
+      </div>
+@endsection
+@section('footer')
+    <script type="text/javascript">
+        $('.delete-btn').on('click', function(){
+            var user_id = $(this).attr('data-user-id');
+            swal({
+                    title: "Are you sure?",
+                    text: "You may be able to recover in future!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel plx!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm) {
+
+                    if (isConfirm) {
+                        $.ajax({
+                            type:'POST',
+                            method:"DELETE",
+                            dataType:"json",
+                            url: '{{ url('/admin/users') }}' + '/' + user_id,
+                            data: { "_token": "{{ csrf_token() }}" },
+                            success:function(data){
+                                if(data.success){
+
+                                    setTimeout(function() {
+                                        swal({
+                                            title: "Deleted!",
+                                            text: "User has been deleted!",
+                                            type: "success"
+                                        }, function() {
+                                            window.location = "{{route('admin.users.index')}}";
+                                        });
+                                    }, 1000);
+                                } else {
+                                    swal("Not Deleted", "Something went wrong :)", "error");
+                                }
+                            }
+                        });
+                    } else {
+                        swal("Cancelled", "Your user data is safe :)", "error");
+                    }
+                });
+        });
+    </script>
 @endsection
