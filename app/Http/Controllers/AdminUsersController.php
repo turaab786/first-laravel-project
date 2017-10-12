@@ -56,6 +56,7 @@ class AdminUsersController extends Controller
         }
         $input['password'] = bcrypt(trim($request->password));
         User::create($input);
+        Session::flash('user_success','User has been created');
         return redirect()->route('admin.users.index');
     }
 
@@ -111,7 +112,7 @@ class AdminUsersController extends Controller
         $user = User::findOrFail($id);
 
         $user->update($input);
-        Session::flash('user_update_success','User has been updated');
+        Session::flash('user_success','User has been updated');
 
         return redirect()->route('admin.users.index');
     }

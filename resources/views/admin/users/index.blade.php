@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    @if(Session::has('user_update_success'))
+    @if(Session::has('user_success'))
         <div class="alert alert-success">
             <strong>Success!</strong> {{session('user_update_success')}}
         </div>

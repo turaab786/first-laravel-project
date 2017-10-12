@@ -3,7 +3,7 @@
 @section('content')
     <h3>Update User</h3>
     <div class="col-sm-3">
-        <img src="{{ ($user->photo) ? $user->photo->file : "/images/400x400.png" }}" alt="No image found" class="img-responsive img-rounded">
+        <img src="{{($user->photo) ? $user->photo->file : '/images/400x400.png'}}" alt="No image found" class="img-responsive img-rounded">
     </div>
     <div class="col-sm-9">
         {!! Form::model($user,['method'=>'PATCH', 'action'=>['AdminUsersController@update',$user->id], 'files'=>true]) !!}
