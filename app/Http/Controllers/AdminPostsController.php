@@ -46,6 +46,7 @@ class AdminPostsController extends Controller
     public function store(PostRequest $request)
     {
         $input = $request->all();
+        $input['slug'] = str_slug($request->title,'_');
         if($file = $request->file('photo_id'))
         {
             $name = time() . $file->getClientOriginalName();
@@ -126,5 +127,11 @@ class AdminPostsController extends Controller
             return json_encode(["success" => true]);
         }
         return json_encode(["success" => false]);
+    }
+
+    public function post($id){
+        $post = Post::findOrFail($id);
+        $comments = $post->comments()->whereIsActive(1)->get();
+        return view('post',compact('post','comments'));
     }
 }

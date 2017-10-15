@@ -7,7 +7,7 @@
         </div>
     @endif
     <h3>Users</h3>
-     <table class="table">
+     <table class="table table-hover">
          <thead>
            <tr>
              <th>ID</th>
@@ -71,7 +71,7 @@
                             success:function(data){
                                 if(data.success){
 
-                                    setTimeout(function() {
+
                                         swal({
                                             title: "Deleted!",
                                             text: "User has been deleted!",
@@ -79,7 +79,6 @@
                                         }, function() {
                                             window.location = "{{route('admin.users.index')}}";
                                         });
-                                    }, 1000);
                                 } else {
                                     swal("Not Deleted", "Something went wrong :)", "error");
                                 }

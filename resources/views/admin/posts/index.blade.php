@@ -7,7 +7,7 @@
         </div>
     @endif
     <h3>Posts</h3>
-    <table class="table">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th>ID</th>
@@ -15,7 +15,7 @@
             <th>Category</th>
             <th>Photo</th>
             <th>Title</th>
-            <th>Body</th>
+            <th>Comments</th>
             <th>Created</th>
             <th>Updated</th>
             <th>Action</th>
@@ -29,10 +29,10 @@
                 <td>{{ $post->category->name }}</td>
                 <td><img height="50" width="50" src="{{ ($post->photo) ? $post->photo->file : "/images/400x400.png" }}"/></td>
                 <td>{{ $post->title }}</td>
-                <td>{{ $post->body }}</td>
+                <td><a href="{{route('admin.comments.show',$post->id)}}">View Comments</a></td>
                 <td>{{ $post->created_at->diffForHumans() }}</td>
                 <td>{{ $post->updated_at->diffForHumans() }}</td>
-                <td><a href="{{route('admin.posts.edit',$post->id)}}" class="btn btn-primary btn-xs" data-title="Edit"><span class="glyphicon glyphicon-pencil"></span></a> | <button class="delete-btn btn btn-danger btn-xs" data-post-id = "{{$post->id}}" data-title="Delete" ><span class="glyphicon glyphicon-trash"></span></button></td>
+                <td><a href="{{route('admin.posts.edit',$post->id)}}" class="btn btn-primary btn-xs" data-title="Edit"><span class="glyphicon glyphicon-pencil"></span></a> | <a href="{{route('home.post',$post->id)}}" target="_blank" class="btn btn-primary btn-xs" data-title="Edit"><span class="glyphicon glyphicon-eye-open"></span></a> | <button class="delete-btn btn btn-danger btn-xs" data-post-id = "{{$post->id}}" data-title="Delete" ><span class="glyphicon glyphicon-trash"></span></button></td>
             </tr>
         @endforeach
         </tbody>
@@ -71,7 +71,7 @@
                             success:function(data){
                                 if(data.success){
 
-                                    setTimeout(function() {
+
                                         swal({
                                             title: "Deleted!",
                                             text: "Post has been deleted!",
@@ -79,7 +79,6 @@
                                         }, function() {
                                             window.location = "{{route('admin.posts.index')}}";
                                         });
-                                    });
                                 } else {
                                     swal("Not Deleted", "Something went wrong :)", "error");
                                 }

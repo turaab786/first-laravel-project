@@ -13,7 +13,8 @@ class Post extends Model
         'body',
         'user_id',
         'category_id',
-        'photo_id'
+        'photo_id',
+        'slug'
 
     ];
     public function user(){
@@ -27,5 +28,8 @@ class Post extends Model
     public function photo(){
         return $this->belongsTo('App\Photo');
     }
-}
 
+    public function comments(){
+        return $this->hasMany('App\Comment');
+    }
+}
